@@ -1,15 +1,16 @@
 clear
 clc
-iteration = 50;
+iteration = 100;
 N = 10; 
 r = 20;
-gamma = 0.5;
-learning_rate = 0.8;
+gamma = 0.75;
+learning_rate = 0.75;
 action_number = 4;
 action_choices = [-N,1,-1,N];
 initial_state = 1;
 goal_state = N*N;
 maze = random_maze(N,r);
+[state,state_environment]=state_environment_control(maze,N);
 mazex = maze;
 imagesc(mazex);
 colormap(gray(256));

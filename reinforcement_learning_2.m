@@ -10,9 +10,29 @@ imagesc(mazex);
 colormap(gray(256));
 drawnow;
 current_state=1;
+trace=[];
+k=1;
+time_limit=20;
 visited_flag=zeros(1,100);
+tic;
 while 1
+if toc>time_limit
+        disp(['This maze can not be solved.']);
+        pause(3);
+        position1 = find(trace == 1);
+        back_trace = fliplr(trace(position1(end):end-1));
+        for i = back_trace
+            [x,y]=state2coordinate(i,N);           
+            mazex(x,y) = 0.5; 
+            imagesc(mazex);
+            drawnow; %Simulasyon istenmiyorsa burasi yoruma alinmalidir.
+            mazex(x,y) = maze(x,y);
+        end
+        return;
+end
 [a,b]=state2coordinate(current_state,N);
+trace(k)=current_state;
+k=k+1;
 mazex(a,b) = 0.5; 
 imagesc(mazex);
 drawnow;
@@ -31,7 +51,15 @@ if visited_flag(current_state+action_choices(index))==1 || state(current_state+a
             || (index==3 && mod(current_state,10)==1) || (state(current_state+action_choices(index))==0)
             t_index=t_index+1;
             if t_index==5
-                return;
+                [x,y]=state_environment_control(maze,10);
+                if any(y(current_state,:))==0
+                    disp(['This maze can not be solved.']);
+                    return;
+                end
+                possible_index=find(y(current_state,:)==1);
+                chosen_index=randi(length(possible_index));
+                index=possible_index(chosen_index);
+                break;
             end
             continue;
         end

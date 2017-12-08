@@ -47,13 +47,17 @@ while 1
         || (visited_flag(current_state+action_choices(index))==1) || (index==2 && mod(current_state,N)==0)...
         || (index==3 && mod(current_state,N)==1) || (state(current_state+action_choices(index))==0)
         t_index=t_index+1;
-        if t_index==5
+        if t_index==4
             [x,y]=state_environment_control(maze,N);
             if any(y(current_state,:))==0
                 disp(['This maze can not be solved.']);
                 return;
             end
             possible_index=find(y(current_state,:)==1);
+            if length(possible_index)==4
+                [val,index] = min( q_alt);
+                possible_index(index)=[];
+            end
             chosen_index=randi(length(possible_index));
             index=possible_index(chosen_index);
             break;
